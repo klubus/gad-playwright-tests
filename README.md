@@ -22,6 +22,18 @@ Follow instructions in app README
 
 ## Use
 
+Run all tests with tags:
+
+```
+npx playwright test --grep @GAD-R01-02
+```
+
+Run all tests without tags:
+
+```
+npx playwright test --grep-invert @GAD-R01-02
+```
+
 Run all tests:
 
 ```
