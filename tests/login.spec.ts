@@ -1,5 +1,6 @@
 import { LoginPage } from '../src/pages/login.page';
 import { WelcomePage } from '../src/pages/welcome.page';
+import { testUser1 } from '../src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify login', () => {
@@ -8,12 +9,12 @@ test.describe('Verify login', () => {
     const loginPage = new LoginPage(page);
     const welcomePage = new WelcomePage(page);
 
-    const userName = 'Moses.Armstrong@Feest.ca';
-    const userPassword = 'test1';
+    const userEmail = testUser1.userEmail;
+    const userPassword = testUser1.userPassword;
 
     // Act
     await loginPage.goto();
-    await loginPage.login(userName, userPassword);
+    await loginPage.login(userEmail, userPassword);
     const title = await welcomePage.title();
 
     // Assert
