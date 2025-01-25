@@ -5,6 +5,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './tests',
+  globalSetup: 'src/global-setup.ts',
   timeout: 60_000,
   expect: { timeout: 10000 },
   fullyParallel: true,
@@ -16,7 +17,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    baseURL: 'http://localhost:3000',
+    baseURL: process.env.BASE_URL,
   },
 
   projects: [
