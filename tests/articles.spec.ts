@@ -32,4 +32,53 @@ test.describe('Verify articles', () => {
       .soft(articlePage.articleBody)
       .toHaveText(articleData.body, { useInnerText: true });
   });
+  test('reject creating article without title @GAD_R04_01', async ({
+    page,
+  }) => {
+    // Arrange
+    const loginPage = new LoginPage(page);
+    const articlesPage = new ArticlesPage(page);
+    const addArticleView = new AddArticleView(page);
+
+    const alertPopUp = 'Article was not created';
+    await loginPage.goto();
+    await loginPage.login(testUser1);
+
+    await articlesPage.goto();
+
+    // Act
+    await articlesPage.addArticleButtonLogged.click();
+    await expect.soft(addArticleView.header).toBeVisible();
+
+    const articleData = randomNewArticle();
+    articleData.title = '';
+    await addArticleView.createArticle(articleData);
+
+    // Assert
+    await expect(addArticleView.alertPopUp).toHaveText(alertPopUp);
+  });
+
+  test('reject creating article without body @GAD_R04_01', async ({ page }) => {
+    // Arrange
+    const loginPage = new LoginPage(page);
+    const articlesPage = new ArticlesPage(page);
+    const addArticleView = new AddArticleView(page);
+
+    const expectedErrorMessage = 'Article was not created';
+    await loginPage.goto();
+    await loginPage.login(testUser1);
+
+    await articlesPage.goto();
+
+    // Act
+    await articlesPage.addArticleButtonLogged.click();
+    await expect.soft(addArticleView.header).toBeVisible();
+
+    const articleData = randomNewArticle();
+    articleData.body = '';
+    await addArticleView.createArticle(articleData);
+
+    // Assert
+    await expect(addArticleView.alertPopUp).toHaveText(expectedErrorMessage);
+  });
 });
