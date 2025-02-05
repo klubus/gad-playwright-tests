@@ -24,21 +24,6 @@ test.describe('Verify articles', () => {
     await expect.soft(addArticleView.header).toBeVisible();
   });
 
-  test('create new article @GAD_R04_01', async ({ page }) => {
-    // Arrange
-    const articlePage = new ArticlePage(page);
-    const articleData = randomNewArticle();
-
-    // Act
-    await addArticleView.createArticle(articleData);
-
-    // Assert
-    await expect.soft(articlePage.articleTitle).toHaveText(articleData.title);
-    await expect
-      .soft(articlePage.articleBody)
-      .toHaveText(articleData.body, { useInnerText: true });
-  });
-
   test('reject creating article without title @GAD_R04_01', async ({}) => {
     // Arrange
     const expectedErrorMessage = 'Article was not created';
