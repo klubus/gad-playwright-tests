@@ -8,7 +8,7 @@ import { AddArticleView } from '../../src/views/add-article.view';
 import test, { expect } from '@playwright/test';
 
 test.describe.configure({ mode: 'serial' });
-test.describe('Verify articles', () => {
+test.describe('Create, verify and delete articles', () => {
   let loginPage: LoginPage;
   let articlesPage: ArticlesPage;
   let addArticleView: AddArticleView;
@@ -51,5 +51,21 @@ test.describe('Verify articles', () => {
     await expect
       .soft(articlePage.articleBody)
       .toHaveText(articleData.body, { useInnerText: true });
+  });
+
+  test('user can delete his own article @GAD_R04_04', async ({}) => {
+    // Arrange
+    await articlesPage.gotoArticle(articleData.title);
+
+    // Act
+    await articlePage.deleteArticle();
+
+    // Assert
+    await articlesPage.waitForPageToLoadUrl();
+    const title = await articlesPage.title();
+    expect(title).toContain('Articles');
+
+    await articlePage.searchArticle(articleData.title);
+    await expect(articlePage.noResultText).toHaveText('No data');
   });
 });
