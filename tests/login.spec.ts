@@ -7,6 +7,8 @@ import { expect, test } from '@playwright/test';
 test.describe('Verify login', () => {
   test('login with correct credentials @GAD_R02_01', async ({ page }) => {
     // Arrange
+    const expectedWelcomeTitle = 'Welcome';
+
     const loginPage = new LoginPage(page);
     const welcomePage = new WelcomePage(page);
 
@@ -16,10 +18,12 @@ test.describe('Verify login', () => {
     const title = await welcomePage.getTitle();
 
     // Assert
-    expect(title).toContain('Welcome');
+    expect(title).toContain(expectedWelcomeTitle);
   });
   test('reject login with incorrect password @GAD_R02_01', async ({ page }) => {
     // Arrange
+    const expectedLoginTitle = 'Login';
+
     const loginPage = new LoginPage(page);
 
     const loginUserData: LoginUserModel = {
@@ -36,6 +40,6 @@ test.describe('Verify login', () => {
     await expect
       .soft(loginPage.loginError)
       .toHaveText('Invalid username or password');
-    expect(title).toContain('Login');
+    expect(title).toContain(expectedLoginTitle);
   });
 });
