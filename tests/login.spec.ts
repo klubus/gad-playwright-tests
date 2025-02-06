@@ -13,7 +13,7 @@ test.describe('Verify login', () => {
     // Act
     await loginPage.goto();
     await loginPage.login(testUser1);
-    const title = await welcomePage.title();
+    const title = await welcomePage.getTitle();
 
     // Assert
     expect(title).toContain('Welcome');
@@ -30,7 +30,7 @@ test.describe('Verify login', () => {
     // Act
     await loginPage.goto();
     await loginPage.login(loginUserData);
-    const title = await loginPage.title();
+    const title = await loginPage.getTitle();
 
     // Assert
     await expect
