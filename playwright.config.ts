@@ -1,3 +1,4 @@
+import { BASE_URL } from './src/env.config';
 import { defineConfig, devices } from '@playwright/test';
 
 /**
@@ -17,7 +18,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
     video: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    baseURL: process.env.BASE_URL,
+    baseURL: BASE_URL,
   },
 
   projects: [
