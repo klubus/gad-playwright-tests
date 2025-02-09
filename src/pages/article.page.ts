@@ -11,6 +11,8 @@ export class ArticlePage extends BasePage {
   searchInput = this.page.getByTestId('search-input');
   goSearchButton = this.page.getByTestId('search-button');
   noResultText = this.page.getByTestId('no-results');
+  addCommentButton = this.page.locator('#add-new');
+  alertPopup = this.page.getByTestId('alert-popup');
 
   constructor(page: Page) {
     super(page);
