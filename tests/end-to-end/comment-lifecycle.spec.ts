@@ -40,16 +40,12 @@ test.describe('Create, verify and delete comment', () => {
     await addArticleView.createArticle(articleData);
   });
 
-  test('create new comment @GAD_R05_01 @GAD_R05_02 @GAD_R05_03', async ({}) => {
-    // Create new comment
-    // Arrange
-    const expectedCommentCreatedPopup = 'Comment was created';
-    const expectedCommentUpdatedPopup = 'Comment was updated';
-
+  test('operate on comments @GAD_R05_01 @GAD_R05_02', async ({}) => {
     const newCommentData = prepareRandomComment();
 
     await test.step('create new comment', async () => {
       // Arrange
+      const expectedCommentCreatedPopup = 'Comment was created';
       const expectedAddNewCommentHeader = 'Add New Comment';
 
       // Act
@@ -80,6 +76,7 @@ test.describe('Create, verify and delete comment', () => {
     await test.step('update comment', async () => {
       // Arrange
       editCommentData = prepareRandomComment();
+      const expectedCommentUpdatedPopup = 'Comment was updated';
 
       // Act
       await commentPage.editButton.click();
@@ -104,24 +101,39 @@ test.describe('Create, verify and delete comment', () => {
       // Assert
       await expect(updatedArticleComment.body).toHaveText(editCommentData.body);
     });
+  });
 
-    await test.step('create and verify second comment', async () => {
+  test('user can add more than one comment to article @GAD_R05_03', async ({}) => {
+    const newCommentData = prepareRandomComment();
+
+    await test.step('create first comment', async () => {
       // Arrange
-      const secondCommentData = prepareRandomComment();
+      const expectedCommentCreatedPopup = 'Comment was created';
 
       // Act
       await articlePage.addCommentButton.click();
-      await addCommentView.createComment(secondCommentData);
+      await addCommentView.createComment(newCommentData);
 
       // Assert
-      const articleComment = articlePage.getArticleComment(
-        secondCommentData.body,
-      );
-      await expect((await articleComment).body).toHaveText(
-        secondCommentData.body,
-      );
-      await articleComment.link.click();
-      await expect(commentPage.commentBody).toHaveText(secondCommentData.body);
+      await expect
+        .soft(articlePage.alertPopup)
+        .toHaveText(expectedCommentCreatedPopup);
+    });
+
+    await test.step('create and verify second comment', async () => {
+      const secondCommentBody = await test.step('create comment', async () => {
+        const secondCommentData = prepareRandomComment();
+        await articlePage.addCommentButton.click();
+        await addCommentView.createComment(secondCommentData);
+        return secondCommentData.body;
+      });
+
+      await test.step('verify comment', async () => {
+        const articleComment = articlePage.getArticleComment(secondCommentBody);
+        await expect((await articleComment).body).toHaveText(secondCommentBody);
+        await articleComment.link.click();
+        await expect(commentPage.commentBody).toHaveText(secondCommentBody);
+      });
     });
   });
 });
