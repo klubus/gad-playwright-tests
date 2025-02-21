@@ -5,7 +5,9 @@ import { testUser1 } from '../src/test-data/user.data';
 import { expect, test } from '@playwright/test';
 
 test.describe('Verify login', () => {
-  test('login with correct credentials @GAD_R02_01', async ({ page }) => {
+  test('login with correct credentials @GAD_R02_01 @logged', async ({
+    page,
+  }) => {
     // Arrange
     const expectedWelcomeTitle = 'Welcome';
 
@@ -20,6 +22,7 @@ test.describe('Verify login', () => {
     // Assert
     expect(title).toContain(expectedWelcomeTitle);
   });
+
   test('reject login with incorrect password @GAD_R02_01', async ({ page }) => {
     // Arrange
     const expectedLoginTitle = 'Login';
