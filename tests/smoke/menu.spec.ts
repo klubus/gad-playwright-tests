@@ -2,11 +2,21 @@ import { ArticlesPage } from '@_src/pages/articles.page';
 import { CommentsPage } from '@_src/pages/comments.page';
 import { test as baseTest, expect } from '@playwright/test';
 
-const test = baseTest.extend<{ articlesPage: ArticlesPage }>({
+interface Pages {
+  articlesPage: ArticlesPage;
+  commentsPage: CommentsPage;
+}
+
+const test = baseTest.extend<Pages>({
   articlesPage: async ({ page }, use) => {
     const articlesPage = new ArticlesPage(page);
     await articlesPage.goto();
     await use(articlesPage);
+  },
+  commentsPage: async ({ page }, use) => {
+    const commentsPage = new CommentsPage(page);
+    await commentsPage.goto();
+    await use(commentsPage);
   },
 });
 
@@ -26,15 +36,12 @@ test.describe('Verify menu main pages', () => {
   });
 
   test('articles button navigates to articles page @GAD-R01-03', async ({
-    page,
+    commentsPage,
   }) => {
     // Arrange
     const expectedArticlesTitle = 'Articles';
 
-    const commentsPage = new CommentsPage(page);
-
     // Act
-    commentsPage.goto();
     const articlesPage = await commentsPage.mainMenu.clickArticlesButton();
     const title = await articlesPage.getTitle();
 
@@ -42,14 +49,13 @@ test.describe('Verify menu main pages', () => {
     expect(title).toContain(expectedArticlesTitle);
   });
 
-  test('home button navigates to home page @GAD-R01-03', async ({ page }) => {
+  test('home button navigates to home page @GAD-R01-03', async ({
+    articlesPage,
+  }) => {
     // Arrange
     const expectedHomePageTitle = 'GAD';
 
-    const articlesPage = new ArticlesPage(page);
-
     // Act
-    articlesPage.goto();
     const homePage = await articlesPage.mainMenu.clickHomePageLink();
     const title = await homePage.getTitle();
 
